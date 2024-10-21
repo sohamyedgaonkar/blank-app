@@ -8,22 +8,8 @@ import spacy
 
 import streamlit as st
 import spacy
-import subprocess
-import sys
-
-# Function to load spaCy model
-def load_spacy_model():
-    try:
-        # Try to load the spaCy model
-        return spacy.load("en_core_web_sm")
-    except OSError:
-        # If the model isn't installed, download it
-        st.warning("Downloading 'en_core_web_sm' model. This may take a moment...")
-        subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"], check=True)
-        return spacy.load("en_core_web_sm")
-
 # Load spaCy model
-nlp_model = load_spacy_model()
+nlp_model = spacy.load("en_core_web_sm")
 
 # Your Streamlit app code goes here
 
