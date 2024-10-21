@@ -1,24 +1,12 @@
 import streamlit as st
 from pytube import extract
 from youtube_transcript_api import YouTubeTranscriptApi
-import spacy
+from spacy_streamlit import visualize_ner, load_model
 from collections import Counter
 import random
-import spacy
-import en_core_web_sm
 
-nlp = en_core_web_sm.load()
-
-# Your Streamlit app code goes here
-
-# Load spaCy model
-# try:
-#     nlp_model = spacy.load("en_core_web_sm")
-# except OSError:
-#     # If the model isn't installed, download it first
-#     import os
-#     os.system("python -m spacy download en_core_web_sm")
-#     nlp_model = spacy.load("en_core_web_sm")
+# Load spaCy model using spacy-streamlit
+nlp = load_model("en_core_web_sm")
 
 def get_transcript(video_url):
     video_id = extract.video_id(video_url)
@@ -26,12 +14,12 @@ def get_transcript(video_url):
     return " ".join([elem["text"] for elem in transcript])
 
 def create_mcqs(input_text, question_count=5):
-    processed_doc = nlp_model(input_text)
+    processed_doc = nlp(input_text)
     sentence_list = [sentence.text for sentence in processed_doc.sents]
     selected_sentences = random.sample(sentence_list, min(question_count, len(sentence_list)))
     mcq_list = []
     for sentence in selected_sentences:
-        sentence_doc = nlp_model(sentence)
+        sentence_doc = nlp(sentence)
         noun_list = [token.text for token in sentence_doc if token.pos_ == "NOUN"]
         if len(noun_list) < 2:
             continue
@@ -77,6 +65,11 @@ if st.button("Generate MCQs"):
                     st.write(f"Correct Answer: {correct_answer}\n")
             else:
                 st.warning("No suitable sentences found to create MCQs.")
+
+            # Optional: Visualize named entities in the transcript
+            st.subheader("Named Entities in Transcript")
+            visualize_ner(transcript_text, model=nlp)
+
         except Exception as e:
             st.error(f"Error extracting transcript: {str(e)}")
     else:
