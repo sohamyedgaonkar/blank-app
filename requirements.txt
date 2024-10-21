@@ -1,6 +1,4 @@
-streamlit
-pytube
-youtube_transcript_api
-spacy
-collections
-random
+streamlit==1.39.0
+pytube==15.0.0
+youtube_transcript_api==0.6.2
+spacy==3.8.2
