@@ -6,7 +6,13 @@ from collections import Counter
 import random
 
 # Load spaCy model
-nlp_model = spacy.load("en_core_web_sm")
+try:
+    nlp_model = spacy.load("en_core_web_sm")
+except OSError:
+    # If the model isn't installed, download it first
+    import os
+    os.system("python -m spacy download en_core_web_sm")
+    nlp_model = spacy.load("en_core_web_sm")
 
 def get_transcript(video_url):
     video_id = extract.video_id(video_url)
