@@ -4,15 +4,22 @@ from youtube_transcript_api import YouTubeTranscriptApi
 import spacy
 from collections import Counter
 import random
+import subprocess
+import sys
+
+# Function to ensure spaCy model is available
+def load_spacy_model():
+    try:
+        # Try to load the spaCy model
+        return spacy.load("en_core_web_sm")
+    except OSError:
+        # If the model isn't installed, download it
+        st.warning("Downloading 'en_core_web_sm' model. This may take a moment...")
+        subprocess.run([sys.executable, "-m", "spacy", "download", "en_core_web_sm"])
+        return spacy.load("en_core_web_sm")
 
 # Load spaCy model
-try:
-    nlp_model = spacy.load("en_core_web_sm")
-except OSError:
-    # If the model isn't installed, download it first
-    import os
-    os.system("python -m spacy download en_core_web_sm")
-    nlp_model = spacy.load("en_core_web_sm")
+nlp_model = load_spacy_model()
 
 def get_transcript(video_url):
     video_id = extract.video_id(video_url)
