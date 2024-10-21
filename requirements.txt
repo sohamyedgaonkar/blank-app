@@ -1,1 +1,6 @@
 streamlit
+pytube
+youtube_transcript_api
+spacy
+collections
+random
