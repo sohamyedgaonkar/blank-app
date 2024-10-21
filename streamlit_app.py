@@ -5,11 +5,9 @@ import spacy
 from collections import Counter
 import random
 import spacy
+import en_core_web_sm
 
-import streamlit as st
-import spacy
-# Load spaCy model
-nlp_model = spacy.load("en_core_web_sm")
+nlp = en_core_web_sm.load()
 
 # Your Streamlit app code goes here
 
